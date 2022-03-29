@@ -1,7 +1,11 @@
-package repositories
+package repository
 
 import (
+	"clean-go/entities"
 	"database/sql"
+	"time"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func exec(db *sql.DB, sql string) sql.Result {
@@ -14,12 +18,44 @@ func exec(db *sql.DB, sql string) sql.Result {
 }
 
 func conn() (db *sql.DB, err error) {
-	db, err = sql.Open("mysql", "igor:123456@go")
+	db, err = sql.Open("mysql", "igor:123456@/go")
+
 	if err != nil {
 		panic(err)
 	}
 
+	db.SetConnMaxLifetime(time.Minute * 3)
+	db.SetMaxOpenConns(10)
+	db.SetMaxIdleConns(10)
+
+	return
+}
+
+/* Transactions */
+func GetTransactions() (t entities.Transaction, err error) {
+	db, err := conn()
+
+	if err != nil {
+		return
+	}
+
 	defer db.Close()
+
+	res, err := db.Query("SELECT * FROM transaction")
+
+	defer res.Close()
+
+	if err != nil {
+		return
+	}
+
+	for res.Next() {
+		err = res.Scan(&t.Transaction, &t.Txid, &t.Nonce)
+
+		if err != nil {
+			return
+		}
+	}
 
 	return
 }
