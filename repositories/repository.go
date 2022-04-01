@@ -1,12 +1,14 @@
 package repository
 
-import "clean-go/entities"
+import (
+	"clean-go/entities"
+)
 
 type Repository interface {
-	transactionRepository
+	TransactionRepo
 }
 
-type transactionRepository interface {
+type TransactionRepo interface {
 	GetTransactions() (entities.Transaction, error)
 	CreateTransaction() (entities.Transaction, error)
 }

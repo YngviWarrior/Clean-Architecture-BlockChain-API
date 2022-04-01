@@ -1,5 +1,5 @@
 package entities
 
 type Entities interface {
-	newTransaction()
+	NewTransaction() *Transaction
 }

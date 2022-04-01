@@ -32,7 +32,7 @@ func conn() (db *sql.DB, err error) {
 }
 
 /* Transactions */
-func GetTransactions() (t entities.Transaction, err error) {
+func (Transaction) GetTransactions() (obj entities.Transaction, err error) {
 	db, err := conn()
 
 	if err != nil {
@@ -50,12 +50,16 @@ func GetTransactions() (t entities.Transaction, err error) {
 	}
 
 	for res.Next() {
-		err = res.Scan(&t.Transaction, &t.Txid, &t.Nonce)
+		err = res.Scan(&obj.Transaction, &obj.Txid, &obj.Nonce)
 
 		if err != nil {
 			return
 		}
 	}
 
+	return
+}
+
+func CreateTransaction() (obj entities.Transaction, err error) {
 	return
 }
