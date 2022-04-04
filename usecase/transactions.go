@@ -38,8 +38,8 @@ func GetExchanges() (resp []getExchangesResponse, err error) {
 		resp = append(resp, obj)
 	}
 
-	dbExchanges := repository.Transaction{}
-	err = dbExchanges.CreateExchanges(resp)
+	// dbExchanges := repository.Exchange{}
+	// err = dbExchanges.CreateExchanges(resp)
 
 	if err != nil {
 		return

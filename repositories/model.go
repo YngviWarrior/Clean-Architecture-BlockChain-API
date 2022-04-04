@@ -5,3 +5,8 @@ type Transaction struct {
 	Txid        string `json:"txid"`
 	Nonce       string `json:"nonce"`
 }
+
+type Exchange struct {
+	ExchangeID int64  `json:"transaction"`
+	Name       string `json:"txid"`
+}
