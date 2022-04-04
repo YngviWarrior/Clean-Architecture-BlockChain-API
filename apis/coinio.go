@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func findTransaction() {
+func FindTransaction() (interface{}, error) {
 	fmt.Println("Calling API...")
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "http://rest-sandbox.coinapi.io/", nil)
@@ -20,13 +20,16 @@ func findTransaction() {
 	req.Header.Add("X-CoinAPI-Key", "540A13CE-0504-41A7-9D95-0494DC440E37")
 
 	resp, err := client.Do(req)
-	defer resp.Body.Close()
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
+
+	defer resp.Body.Close()
 
 	if err != nil {
 		fmt.Print(err.Error())
 	}
 
 	fmt.Println(bodyBytes)
+
+	return resp, err
 }

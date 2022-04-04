@@ -5,5 +5,5 @@ type Apis interface {
 }
 
 type CoinIO interface {
-	findTransaction()
+	FindTransaction() (interface{}, error)
 }
