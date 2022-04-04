@@ -32,7 +32,7 @@ func conn() (db *sql.DB, err error) {
 }
 
 /* Transactions */
-func (Transaction) GetTransactions() (obj entities.Transaction, err error) {
+func (Transaction) GetTransactions() (list []entities.Transaction, err error) {
 	db, err := conn()
 
 	if err != nil {
@@ -50,16 +50,54 @@ func (Transaction) GetTransactions() (obj entities.Transaction, err error) {
 	}
 
 	for res.Next() {
+		obj := entities.Transaction{}
 		err = res.Scan(&obj.Transaction, &obj.Txid, &obj.Nonce)
 
 		if err != nil {
 			return
 		}
+
+		list = append(list, obj)
 	}
 
 	return
 }
 
-func CreateTransaction() (obj entities.Transaction, err error) {
+func (Transaction) CreateTransaction() (obj entities.Transaction, err error) {
+	return
+}
+
+func (Exchange) GetExchanges() (list []entities.Exchange, err error) {
+	db, err := conn()
+
+	if err != nil {
+		return
+	}
+
+	defer db.Close()
+
+	res, err := db.Query("SELECT * FROM transaction")
+
+	defer res.Close()
+
+	if err != nil {
+		return
+	}
+
+	for res.Next() {
+		obj := entities.Exchange{}
+		err = res.Scan(&obj.ID, &obj.Name, &obj.Website)
+
+		if err != nil {
+			return
+		}
+
+		list = append(list, obj)
+	}
+
+	return
+}
+
+func (Exchange) CreateExchanges([]entities.CoinIOGetExchangesResponse) (obj entities.Exchange, err error) {
 	return
 }

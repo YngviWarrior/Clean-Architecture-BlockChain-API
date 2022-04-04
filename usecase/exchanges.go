@@ -3,6 +3,7 @@ package usecase
 import (
 	"clean-go/apis"
 	"clean-go/entities"
+	repository "clean-go/repositories"
 )
 
 func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
@@ -13,11 +14,13 @@ func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
 		var obj entities.CoinIOGetExchangesResponse
 		obj.ExchangeID = exchange.ExchangeID
 		obj.Name = exchange.Name
+
 		resp = append(resp, obj)
+
 	}
 
-	// dbExchanges := repository.Exchange{}
-	// err = dbExchanges.CreateExchanges(resp)
+	dbExchanges := repository.Exchange{}
+	_, err = dbExchanges.CreateExchanges(resp)
 
 	if err != nil {
 		return

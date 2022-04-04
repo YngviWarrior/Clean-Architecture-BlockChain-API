@@ -5,7 +5,7 @@ import (
 	repository "clean-go/repositories"
 )
 
-func GetTransactions() (resp entities.Transaction, err error) {
+func GetTransactions() (resp []entities.Transaction, err error) {
 	tx := repository.Transaction{}
 	resp, err = tx.GetTransactions()
 

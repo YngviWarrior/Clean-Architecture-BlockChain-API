@@ -1,9 +1,9 @@
 package entities
 
 type Exchange struct {
-	ExchangeID string `json:"exchange_id"`
-	Website    string `json:"website"`
-	Name       string `json:"name"`
+	ID      string `json:"exchange_id"`
+	Website string `json:"website"`
+	Name    string `json:"name"`
 }
 
 type CoinIOGetExchangesResponse struct {

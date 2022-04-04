@@ -6,9 +6,15 @@ import (
 
 type Repository interface {
 	TransactionRepo
+	ExchangeRepo
 }
 
 type TransactionRepo interface {
-	GetTransactions() (entities.Transaction, error)
+	GetTransactions() ([]entities.Transaction, error)
 	CreateTransaction() (entities.Transaction, error)
+}
+
+type ExchangeRepo interface {
+	GetExchanges() ([]entities.Exchange, error)
+	CreateExchanges([]entities.CoinIOGetExchangesResponse) (entities.Exchange, error)
 }
