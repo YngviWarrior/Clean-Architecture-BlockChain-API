@@ -1,15 +1,15 @@
 package main
 
 import (
-	"clean-go/apis"
 	"clean-go/usecase"
 	"fmt"
 )
 
 func main() {
-	t, err := usecase.GetTransactions()
-	fmt.Println(t, err)
+	exc, _ := usecase.GetExchanges()
+	// tx, err := usecase.GetTransactions()
 
-	resp := apis.CoinIO.FindTransaction
-	fmt.Println(resp)
+	for _, e := range exc {
+		fmt.Printf("ID: %v -- Name: %v \n", e.ExchangeID, e.Name)
+	}
 }
