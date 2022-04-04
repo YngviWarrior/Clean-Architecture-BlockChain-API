@@ -13,10 +13,17 @@ type Transaction struct {
 	Nonce       string `json:"nonce"`
 }
 
-type FindTransactionResponse struct {
+type Exchange struct {
+	ExchangeID string `json:"exchange_id"`
+	Website    string `json:"website"`
+	Name       string `json:"name"`
+}
+
+type GetTransactionResponse struct {
 	ExchangeID string `json:"exchange_id"`
 }
-type FindExchangeResponse struct {
+
+type GetExchangeResponse struct {
 	ExchangeID         string  `json:"exchange_id"`
 	Website            string  `json:"website"`
 	Name               string  `json:"name"`
@@ -34,11 +41,11 @@ type FindExchangeResponse struct {
 	Volume1MthUsd      float64 `json:"volume_1mth_usd"`
 }
 
-func (Transaction) FindTransaction() (response []FindTransactionResponse, err error) {
+func (Transaction) FindTransaction() (response []GetTransactionResponse, err error) {
 	return
 }
 
-func (Transaction) FindExchanges() (response []FindExchangeResponse, err error) {
+func (Exchange) GetExchanges() (response []GetExchangeResponse, err error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "http://rest-sandbox.coinapi.io/v1/exchanges", nil)
 

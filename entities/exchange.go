@@ -1,17 +1,12 @@
 package entities
 
-type Transaction struct {
-	Transaction int64  `json:"transaction"`
-	Txid        string `json:"txid"`
-	Nonce       string `json:"nonce"`
+type Exchange struct {
+	ExchangeID string `json:"exchange_id"`
+	Website    string `json:"website"`
+	Name       string `json:"name"`
 }
 
-func NewTransaction() *Transaction {
-	t := &Transaction{}
-	return t
-}
-
-type CoinIOGetTransactionsResponse struct {
+type CoinIOGetExchangesResponse struct {
 	ExchangeID         string `json:"exchange_id"`
 	Website            string `json:"website"`
 	Name               string `json:"name"`

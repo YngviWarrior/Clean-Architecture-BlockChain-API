@@ -1,10 +1,12 @@
 package apis
 
+import "clean-go/entities"
+
 type Apis interface {
 	CoinIO
 }
 
 type CoinIO interface {
-	FindTransaction() (interface{}, error)
-	FindExchanges() (interface{}, error)
+	GetTransaction() ([]entities.CoinIOGetTransactionsResponse, error)
+	GetExchanges() ([]entities.CoinIOGetExchangesResponse, error)
 }
