@@ -3,6 +3,7 @@ package repository
 import (
 	"clean-go/entities"
 	"database/sql"
+	"fmt"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -98,6 +99,38 @@ func (Exchange) GetExchanges() (list []entities.Exchange, err error) {
 	return
 }
 
-func (Exchange) CreateExchanges([]entities.CoinIOGetExchangesResponse) (obj entities.Exchange, err error) {
+func (Exchange) CreateExchanges(exchanges []entities.CoinIOGetExchangesResponse) (err error) {
+	db, err := conn()
+
+	if err != nil {
+		return
+	}
+
+	sql := "INSERT INTO exchange VALUES "
+
+	for i, exchange := range exchanges {
+		res, _ := db.Query("SELECT * FROM exchange WHERE exchange = ?", exchange.ExchangeID)
+
+		if res.Next() {
+			fmt.Printf("Already Exists %v", exchange.Name)
+		} else {
+			if i == (len(exchanges) - 1) {
+				sql += fmt.Sprintf("('%v', '%v', '%v')", exchange.ExchangeID, exchange.Name, exchange.Website)
+			} else {
+				sql += fmt.Sprintf("('%v', '%v', '%v'), ", exchange.ExchangeID, exchange.Name, exchange.Website)
+			}
+		}
+
+		defer res.Close()
+	}
+
+	res, err := db.Query(sql)
+
+	if err != nil {
+		return
+	}
+
+	defer res.Close()
+
 	return
 }

@@ -14,13 +14,14 @@ func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
 		var obj entities.CoinIOGetExchangesResponse
 		obj.ExchangeID = exchange.ExchangeID
 		obj.Name = exchange.Name
+		obj.Website = exchange.Website
 
 		resp = append(resp, obj)
 
 	}
 
 	dbExchanges := repository.Exchange{}
-	_, err = dbExchanges.CreateExchanges(resp)
+	err = dbExchanges.CreateExchanges(resp)
 
 	if err != nil {
 		return

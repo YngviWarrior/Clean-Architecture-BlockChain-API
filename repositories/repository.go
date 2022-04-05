@@ -16,5 +16,5 @@ type TransactionRepo interface {
 
 type ExchangeRepo interface {
 	GetExchanges() ([]entities.Exchange, error)
-	CreateExchanges([]entities.CoinIOGetExchangesResponse) (entities.Exchange, error)
+	CreateExchanges([]entities.CoinIOGetExchangesResponse) error
 }
