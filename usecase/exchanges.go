@@ -6,9 +6,11 @@ import (
 	repository "clean-go/repositories"
 )
 
-func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
-	apiExchanges := apis.Exchange{}
-	exchanges, err := apiExchanges.GetExchanges()
+func GetExchanges() error {
+	var resp []entities.CoinIOGetExchangesResponse
+
+	var apiInterface apis.Api
+	exchanges, err := apiInterface.GetExchanges()
 
 	for _, exchange := range exchanges {
 		var obj entities.CoinIOGetExchangesResponse
@@ -20,12 +22,12 @@ func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
 
 	}
 
-	dbExchanges := repository.Exchange{}
-	err = dbExchanges.CreateExchanges(resp)
+	var repoInterface repository.Repository
+	err = repoInterface.CreateExchanges(resp)
 
 	if err != nil {
-		return
+		return err
 	}
 
-	return resp, err
+	return err
 }

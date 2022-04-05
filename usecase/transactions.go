@@ -6,8 +6,8 @@ import (
 )
 
 func GetTransactions() (resp []entities.Transaction, err error) {
-	tx := repository.Transaction{}
-	resp, err = tx.GetTransactions()
+	var repoInterface repository.Repository
+	resp, err = repoInterface.GetTransactions()
 
 	return resp, err
 }

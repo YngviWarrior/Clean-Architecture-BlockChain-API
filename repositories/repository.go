@@ -4,7 +4,7 @@ import (
 	"clean-go/entities"
 )
 
-type Repository interface {
+type Repository struct {
 	TransactionRepo
 	ExchangeRepo
 }

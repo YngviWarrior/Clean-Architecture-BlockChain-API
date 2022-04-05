@@ -2,7 +2,7 @@ package apis
 
 import "clean-go/entities"
 
-type Apis interface {
+type Api struct {
 	CoinIO
 }
 

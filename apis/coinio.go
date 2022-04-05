@@ -7,18 +7,6 @@ import (
 	"net/http"
 )
 
-type Transaction struct {
-	Transaction int64  `json:"transaction"`
-	Txid        string `json:"txid"`
-	Nonce       string `json:"nonce"`
-}
-
-type Exchange struct {
-	ExchangeID string `json:"exchange_id"`
-	Website    string `json:"website"`
-	Name       string `json:"name"`
-}
-
 type GetTransactionResponse struct {
 	ExchangeID string `json:"exchange_id"`
 }
@@ -41,11 +29,11 @@ type GetExchangeResponse struct {
 	Volume1MthUsd      float64 `json:"volume_1mth_usd"`
 }
 
-func (Transaction) FindTransaction() (response []GetTransactionResponse, err error) {
+func (Api) FindTransaction() (response []GetTransactionResponse, err error) {
 	return
 }
 
-func (Exchange) GetExchanges() (response []GetExchangeResponse, err error) {
+func (Api) GetExchanges() (response []GetExchangeResponse, err error) {
 	client := &http.Client{}
 	req, err := http.NewRequest("GET", "http://rest-sandbox.coinapi.io/v1/exchanges", nil)
 
@@ -55,7 +43,7 @@ func (Exchange) GetExchanges() (response []GetExchangeResponse, err error) {
 
 	req.Header.Add("Accept", "application/json")
 	req.Header.Add("Content-Type", "application/json")
-	req.Header.Add("X-CoinAPI-Key", "540A13CE-0504-41A7-9D95-0494DC440E37")
+	// req.Header.Add("X-CoinAPI-Key", "540A13CE-0504-41A7-9D95-0494DC440E37")
 
 	q := req.URL.Query()
 	q.Add("apikey", "540A13CE-0504-41A7-9D95-0494DC440E37")

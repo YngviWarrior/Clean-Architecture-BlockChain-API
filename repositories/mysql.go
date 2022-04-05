@@ -33,7 +33,7 @@ func conn() (db *sql.DB, err error) {
 }
 
 /* Transactions */
-func (Transaction) GetTransactions() (list []entities.Transaction, err error) {
+func (Repository) GetTransactions() (list []entities.Transaction, err error) {
 	db, err := conn()
 
 	if err != nil {
@@ -64,11 +64,11 @@ func (Transaction) GetTransactions() (list []entities.Transaction, err error) {
 	return
 }
 
-func (Transaction) CreateTransaction() (obj entities.Transaction, err error) {
+func (Repository) CreateTransaction() (obj entities.Transaction, err error) {
 	return
 }
 
-func (Exchange) GetExchanges() (list []entities.Exchange, err error) {
+func (Repository) GetExchanges() (list []entities.Exchange, err error) {
 	db, err := conn()
 
 	if err != nil {
@@ -77,7 +77,7 @@ func (Exchange) GetExchanges() (list []entities.Exchange, err error) {
 
 	defer db.Close()
 
-	res, err := db.Query("SELECT * FROM transaction")
+	res, err := db.Query("SELECT * FROM exchange")
 
 	defer res.Close()
 
@@ -99,7 +99,7 @@ func (Exchange) GetExchanges() (list []entities.Exchange, err error) {
 	return
 }
 
-func (Exchange) CreateExchanges(exchanges []entities.CoinIOGetExchangesResponse) (err error) {
+func (Repository) CreateExchanges(exchanges []entities.CoinIOGetExchangesResponse) (err error) {
 	db, err := conn()
 
 	if err != nil {
@@ -112,7 +112,7 @@ func (Exchange) CreateExchanges(exchanges []entities.CoinIOGetExchangesResponse)
 		res, _ := db.Query("SELECT * FROM exchange WHERE exchange = ?", exchange.ExchangeID)
 
 		if res.Next() {
-			fmt.Printf("Already Exists %v", exchange.Name)
+			fmt.Printf("Already Exists %v \n", exchange.Name)
 		} else {
 			if i == (len(exchanges) - 1) {
 				sql += fmt.Sprintf("('%v', '%v', '%v')", exchange.ExchangeID, exchange.Name, exchange.Website)
