@@ -111,6 +111,8 @@ func (Repository) CreateExchanges(exchanges []entities.CoinIOGetExchangesRespons
 	for i, exchange := range exchanges {
 		res, _ := db.Query("SELECT * FROM exchange WHERE exchange = ?", exchange.ExchangeID)
 
+		defer res.Close()
+
 		if res.Next() {
 			fmt.Printf("Already Exists %v \n", exchange.Name)
 		} else {
@@ -120,17 +122,15 @@ func (Repository) CreateExchanges(exchanges []entities.CoinIOGetExchangesRespons
 				sql += fmt.Sprintf("('%v', '%v', '%v'), ", exchange.ExchangeID, exchange.Name, exchange.Website)
 			}
 		}
-
-		defer res.Close()
 	}
 
 	res, err := db.Query(sql)
 
+	defer res.Close()
+
 	if err != nil {
 		return
 	}
-
-	defer res.Close()
 
 	return
 }

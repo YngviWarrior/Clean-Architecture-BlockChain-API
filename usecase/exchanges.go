@@ -6,9 +6,7 @@ import (
 	repository "clean-go/repositories"
 )
 
-func GetExchanges() error {
-	var resp []entities.CoinIOGetExchangesResponse
-
+func GetExchanges() (resp []entities.CoinIOGetExchangesResponse, err error) {
 	var apiInterface apis.Api
 	exchanges, err := apiInterface.GetExchanges()
 
@@ -26,8 +24,8 @@ func GetExchanges() error {
 	err = repoInterface.CreateExchanges(resp)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return err
+	return resp, err
 }
