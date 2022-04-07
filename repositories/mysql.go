@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"clean-go/apis"
 	"clean-go/entities"
 	"database/sql"
 	"fmt"
@@ -99,27 +100,61 @@ func (Repository) GetExchanges() (list []entities.Exchange, err error) {
 	return
 }
 
-func (Repository) CreateExchanges(exchanges []entities.CoinIOGetExchangesResponse) (err error) {
+func (Repository) GetExchangeByID(id string) (obj entities.Exchange, err error) {
 	db, err := conn()
 
 	if err != nil {
 		return
 	}
 
-	sql := "INSERT INTO exchange VALUES "
+	defer db.Close()
 
-	for i, exchange := range exchanges {
-		res, _ := db.Query("SELECT * FROM exchange WHERE exchange = ?", exchange.ExchangeID)
+	res, err := db.Query("SELECT * FROM exchange WHERE exchange = ?", id)
+
+	defer res.Close()
+
+	if err != nil {
+		return
+	}
+
+	for res.Next() {
+		err = res.Scan(&obj.ID, &obj.Name, &obj.Website)
+
+		if err != nil {
+			return
+		}
+	}
+
+	return
+}
+
+func (Repository) GetExchangesByID(ids []string) (list []entities.Exchange, err error) {
+	db, err := conn()
+
+	if err != nil {
+		return
+	}
+
+	defer db.Close()
+
+	sql := "SELECT * FROM exchange WHERE exchange IN ("
+
+	for i, id := range ids {
+		res, erro := db.Query("SELECT * FROM exchange WHERE exchange = ?", id)
 
 		defer res.Close()
 
+		if erro != nil {
+			fmt.Println(erro)
+		}
+
 		if res.Next() {
-			fmt.Printf("Already Exists %v \n", exchange.Name)
+
 		} else {
-			if i == (len(exchanges) - 1) {
-				sql += fmt.Sprintf("('%v', '%v', '%v')", exchange.ExchangeID, exchange.Name, exchange.Website)
+			if i == (len(id) - 1) {
+				sql += fmt.Sprintf("'%v', ", id)
 			} else {
-				sql += fmt.Sprintf("('%v', '%v', '%v'), ", exchange.ExchangeID, exchange.Name, exchange.Website)
+				sql += fmt.Sprintf("'%v')", id)
 			}
 		}
 	}
@@ -130,6 +165,49 @@ func (Repository) CreateExchanges(exchanges []entities.CoinIOGetExchangesRespons
 
 	if err != nil {
 		return
+	}
+
+	for res.Next() {
+		obj := entities.Exchange{}
+		err = res.Scan(&obj.ID, &obj.Name, &obj.Website)
+
+		if err != nil {
+			return
+		}
+
+		list = append(list, obj)
+	}
+
+	return
+}
+
+func (Repository) CreateExchanges(exchanges []apis.GetExchangeResponse) (err error) {
+	db, err := conn()
+
+	if err != nil {
+		return
+	}
+
+	sql := "INSERT INTO exchange VALUES "
+	sqlValues := ""
+
+	for i, exchange := range exchanges {
+		if i == (len(exchanges) - 1) {
+			sqlValues += fmt.Sprintf("('%v', '%v', '%v')", exchange.ExchangeID, exchange.Name, exchange.Website)
+		} else {
+			sqlValues += fmt.Sprintf("('%v', '%v', '%v'), ", exchange.ExchangeID, exchange.Name, exchange.Website)
+		}
+	}
+
+	if sqlValues != "" {
+		sql = fmt.Sprintf("%s %s", sql, sqlValues)
+		res, erro := db.Query(sql)
+
+		defer res.Close()
+
+		if erro != nil {
+			fmt.Println(erro)
+		}
 	}
 
 	return
